@@ -28,7 +28,7 @@ import java.util.List;
  */
 public class Tp extends Activity {
 
-    AutoCompleteTextView atvPlaces;
+    AutoCompleteTextView atvPlaces, atvPlaces_dest;
     PlacesTask placesTask;
     ParserTask parserTask;
 
@@ -39,6 +39,10 @@ public class Tp extends Activity {
 
         atvPlaces = (AutoCompleteTextView) findViewById(R.id.atv_places);
         atvPlaces.setThreshold(1);
+
+        //Updated by Shikha Jain 20/9/15
+        atvPlaces_dest = (AutoCompleteTextView) findViewById(R.id.atv_places_dest);
+        atvPlaces_dest.setThreshold(1);
 
         atvPlaces.addTextChangedListener(new TextWatcher() {
 
@@ -59,6 +63,27 @@ public class Tp extends Activity {
                 // TODO Auto-generated method stub
             }
         });
+
+        atvPlaces_dest.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                placesTask = new PlacesTask();
+                placesTask.execute(s.toString());
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                                          int after) {
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // TODO Auto-generated method stub
+            }
+        });
+        //end update Shikha Jain 20/9/15
     }
 
     /** A method to download json data from url */
@@ -190,6 +215,7 @@ public class Tp extends Activity {
 
             // Setting the adapter
             atvPlaces.setAdapter(adapter);
+            atvPlaces_dest.setAdapter(adapter);
         }
     }
 
