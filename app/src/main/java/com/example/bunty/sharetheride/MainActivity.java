@@ -1,5 +1,6 @@
 package com.example.bunty.sharetheride;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 
 import com.example.bunty.sharetheride.Adapter.MyAdapter;
 import com.example.bunty.sharetheride.Decorate.DividerItemDecoration;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -23,7 +25,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 
-public class MainActivity extends ActionBarActivity implements OnMapReadyCallback{
+public class MainActivity extends ActionBarActivity implements OnMapReadyCallback {
    // String TITLES[] =
     int ICONS[] = {R.drawable.ic_action,R.drawable.ic_action,R.drawable.ic_action
             ,R.drawable.ic_action,R.drawable.ic_action,R.drawable.ic_action,R.drawable.ic_action};
@@ -34,6 +36,9 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
     String NAME = "Arun Agarwal";
     String EMAIL = "arun2621993@gmail.com";
     int PROFILE = R.drawable.ic_action;
+    //update by Shikha Jain 19/9/2015
+    GetCurrLocation gps;
+    //end update 19/9/15
 
     private Toolbar toolbar;                              // Declaring the Toolbar Object
 
@@ -47,14 +52,15 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
 
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         MapFragment mapFragment = (MapFragment) getFragmentManager()
                 .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+
+         mapFragment.getMapAsync(this);
+
 
 
     /* Assinging the toolbar object ot the view
@@ -110,11 +116,6 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
 
             }
         });
-
-
-
-
-
 
         mRecyclerView.setAdapter(mAdapter);                              // Setting the adapter to RecyclerView
 
@@ -173,11 +174,43 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        googleMap.addMarker(new MarkerOptions()
-                .position(new LatLng(0, 0))
-                .title("Marker"));
+//update by Shikha Jain 19/9/15
+        gps = new GetCurrLocation(MainActivity.this);
+        // check if GPS enabled
+        if(gps.canGetLocation()){
+
+            double latitude = gps.getLatitude();
+            double longitude = gps.getLongitude();
+
+            // \n is for new line
+            Toast.makeText(getApplicationContext(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
+            googleMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(latitude, longitude))
+                    .title("Marker"));
+
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 15));
+            // Zoom in, animating the camera.
+            googleMap.animateCamera(CameraUpdateFactory.zoomIn());
+            // Zoom out to zoom level 10, animating with a duration of 2 seconds.
+            googleMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
+        }else{
+            // can't get location
+            // GPS or Network is not enabled
+            // Ask user to enable GPS/network in settings
+            gps.showSettingsAlert();
+        }
 
     }
 
+    public void OfferRide(View v){
+        Toast.makeText(MainActivity.this, "Offer Ride", Toast.LENGTH_SHORT).show();
+        Intent i = new Intent(this,Tp.class);
+        startActivity(i);
+    }
+
+    public void TakeRide(View v){
+
+
+    }
 
 }

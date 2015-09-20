@@ -4,10 +4,44 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity" >
 
-    <com.example.bunty.sharetheride.CustomAutoCompleteTextView
-        android:id="@+id/atv_places"
-        android:layout_width="fill_parent"
+    <TextView
+        android:id="@+id/txt1"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:hint="@string/str_atv_places" />
+        android:text="Source: "
+        android:textSize="18dp"
+        android:layout_alignBaseline="@+id/atv_places"/>
+
+    <com.example.bunty.sharetheride.CustomAutoCompleteTextView
+        android:id="@+id/atv_places"
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:hint="@string/str_atv_places"
+        android:layout_toRightOf="@id/txt1"/>
+
+    <TextView
+        android:id="@+id/txt2"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="Destination: "
+        android:layout_below="@+id/atv_places"
+        android:textSize="18dp"
+        android:layout_alignBaseline="@+id/atv_places_dest"/>
+
+    <com.example.bunty.sharetheride.CustomAutoCompleteTextView
+        android:id="@+id/atv_places_dest"
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/str_atv_places"
+        android:layout_below="@+id/atv_places"
+        android:layout_toRightOf="@+id/txt2"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnShow"
+        android:layout_below="@+id/atv_places_dest"
+        android:text="Show"/>
 </RelativeLayout>
