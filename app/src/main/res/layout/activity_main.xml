@@ -18,12 +18,12 @@
             layout="@layout/tool_bar">
         </include>
 
-        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+       <!-- <fragment xmlns:android="http://schemas.android.com/apk/res/android"
             android:name="com.google.android.gms.maps.MapFragment"
             android:id="@+id/map"
             android:layout_width="match_parent"
-            android:layout_height="420dp"
-            android:layout_below="@+id/tool_bar"/>
+            android:layout_height="400dp"
+            android:layout_below="@+id/tool_bar"/>-->
 
 
         <Button
@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:text="Offer Ride"
             android:id="@+id/btnOfferride"
-            android:layout_below="@+id/map"
+            android:layout_below="@+id/tool_bar"
             android:onClick="OfferRide"
             />
 
@@ -39,7 +39,7 @@
             android:layout_width="175dp"
             android:layout_height="wrap_content"
             android:text="Take Ride"
-            android:layout_below="@+id/map"
+            android:layout_below="@+id/tool_bar"
             android:layout_toRightOf="@+id/btnOfferride"
             android:id="@+id/btnTakeride"
             android:onClick="TakeRide"/>

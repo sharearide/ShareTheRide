@@ -48,6 +48,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity android:name=".GetDirection"/>
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/API_KEY"/>

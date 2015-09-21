@@ -1,14 +1,19 @@
 package com.example.bunty.sharetheride;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.SimpleAdapter;
+import android.widget.Toast;
 
 import org.json.JSONObject;
 
@@ -22,6 +27,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by bunty on 9/19/2015.
@@ -225,4 +231,58 @@ public class Tp extends Activity {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
+//Update by Shikha Jain 21/9/15
+    public void ShowOnMap(View V){
+        AutoCompleteTextView src_atc = (AutoCompleteTextView)findViewById(R.id.atv_places);
+        AutoCompleteTextView dest_atc = (AutoCompleteTextView)findViewById(R.id.atv_places_dest);
+
+        String src_addr = src_atc.getText().toString();
+        String dest_addr = dest_atc.getText().toString();
+
+        Geocoder gc = new Geocoder(this, Locale.getDefault());
+        String  result = "", result1 = "";
+        Address address = null, address_d= null;
+       // LatLng src_pts = new LatLng(0,0);
+        //LatLng dest_pts= new LatLng(0,0);
+        try {
+            List addressList = gc.getFromLocationName(src_addr, 1);
+            if (addressList != null && addressList.size() > 0) {
+                address = (Address) addressList.get(0);
+                StringBuilder sb = new StringBuilder();
+                sb.append(address.getLatitude()).append("\n");
+                sb.append(address.getLongitude()).append("\n");
+                result = sb.toString();
+                //src_pts = new LatLng(address.getLatitude(),address.getLongitude());
+            }
+            List addressList_d = gc.getFromLocationName(dest_addr, 1);
+            if (addressList_d != null && addressList_d.size() > 0) {
+                address_d = (Address) addressList_d.get(0);
+                StringBuilder sb_d = new StringBuilder();
+                sb_d.append(address_d.getLatitude()).append("\n");
+                sb_d.append(address_d.getLongitude()).append("\n");
+                result1 = sb_d.toString();
+                //dest_pts = new LatLng(address_d.getLatitude(),address_d.getLongitude());
+            }
+
+            Intent i = new Intent(this,GetDirection.class);
+            i.putExtra("src_lat", String.valueOf(address.getLatitude()));
+            i.putExtra("src_long", String.valueOf(address.getLongitude()));
+            i.putExtra("dest_lat", String.valueOf(address_d.getLatitude()));
+            i.putExtra("dest_long", String.valueOf(address_d.getLongitude()));
+            startActivity(i);
+
+
+        }
+        catch(Exception e){
+            Log.e("Error",e.toString());
+            }
+        finally {
+            Toast.makeText(Tp.this, result+"\n"+result1, Toast.LENGTH_SHORT).show();
+        }
+
+
+
+    }
+
+    //end update by SHikha Jain 21/9/15
 }

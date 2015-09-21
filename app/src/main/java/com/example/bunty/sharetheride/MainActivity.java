@@ -17,15 +17,9 @@ import android.widget.Toast;
 
 import com.example.bunty.sharetheride.Adapter.MyAdapter;
 import com.example.bunty.sharetheride.Decorate.DividerItemDecoration;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 
-public class MainActivity extends ActionBarActivity implements OnMapReadyCallback {
+public class MainActivity extends ActionBarActivity {//implements OnMapReadyCallback {
    // String TITLES[] =
     int ICONS[] = {R.drawable.ic_action,R.drawable.ic_action,R.drawable.ic_action
             ,R.drawable.ic_action,R.drawable.ic_action,R.drawable.ic_action,R.drawable.ic_action};
@@ -56,14 +50,12 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        MapFragment mapFragment = (MapFragment) getFragmentManager()
-                .findFragmentById(R.id.map);
+        //MapFragment mapFragment = (MapFragment) getFragmentManager()
+          //      .findFragmentById(R.id.map);
 
-         mapFragment.getMapAsync(this);
+         //mapFragment.getMapAsync(this);
 
-
-
-    /* Assinging the toolbar object ot the view
+     /* Assinging the toolbar object ot the view
     and setting the the Action bar to our toolbar
      */
 
@@ -172,7 +164,7 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
+  /*  @Override
     public void onMapReady(GoogleMap googleMap) {
 //update by Shikha Jain 19/9/15
         gps = new GetCurrLocation(MainActivity.this);
@@ -186,7 +178,8 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
             Toast.makeText(getApplicationContext(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
             googleMap.addMarker(new MarkerOptions()
                     .position(new LatLng(latitude, longitude))
-                    .title("Marker"));
+                    .title("My Location")
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
 
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 15));
             // Zoom in, animating the camera.
@@ -200,7 +193,7 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
             gps.showSettingsAlert();
         }
 
-    }
+    }*/
 
     public void OfferRide(View v){
         Toast.makeText(MainActivity.this, "Offer Ride", Toast.LENGTH_SHORT).show();

@@ -43,5 +43,6 @@
         android:layout_height="wrap_content"
         android:id="@+id/btnShow"
         android:layout_below="@+id/atv_places_dest"
-        android:text="Show"/>
+        android:text="Show"
+        android:onClick="ShowOnMap"/>
 </RelativeLayout>
