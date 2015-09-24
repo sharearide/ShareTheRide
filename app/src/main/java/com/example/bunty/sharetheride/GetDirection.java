@@ -2,6 +2,7 @@ package com.example.bunty.sharetheride;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
@@ -80,6 +81,10 @@ public class GetDirection extends FragmentActivity implements LocationListener{
                 mGoogleMap.animateCamera(CameraUpdateFactory.zoomIn());
                 // Zoom out to zoom level 10, animating with a duration of 2 seconds.
                 mGoogleMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
+                Intent i1= new Intent();
+                i1.putExtra("mylat", latitude );
+                i1.putExtra("mylong",longitude);
+                setResult(101, i1);
             } else {
                 // can't get location
                 // GPS or Network is not enabled

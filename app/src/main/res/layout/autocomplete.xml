@@ -19,7 +19,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:hint="@string/str_atv_places"
-        android:layout_toRightOf="@id/txt1"/>
+        android:layout_toRightOf="@id/txt1"
+        android:singleLine="true"         />
 
     <TextView
         android:id="@+id/txt2"
@@ -36,13 +37,125 @@
         android:layout_height="wrap_content"
         android:hint="@string/str_atv_places"
         android:layout_below="@+id/atv_places"
-        android:layout_toRightOf="@+id/txt2"/>
+        android:layout_toRightOf="@+id/txt2"
+        android:singleLine="true" />
+
+    <TextView
+        android:id="@+id/txtd"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="Date: "
+        android:layout_below="@+id/atv_places_dest"
+        android:textSize="18dp"
+        android:layout_alignBaseline="@+id/txtdate"/>
+    <EditText
+        android:id="@+id/txtdate"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/atv_places_dest"
+        android:layout_toRightOf="@+id/txtd"/>
+
+    <TextView
+        android:id="@+id/txt3"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="Time of Travel: "
+        android:layout_below="@+id/txtd"
+        android:textSize="18dp"
+        android:layout_marginTop="10dp"/>
+
+    <EditText
+        android:id="@+id/txthh"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtdate"
+        android:layout_toRightOf="@+id/txt3"/>
+    <TextView
+        android:id="@+id/txtcolon"
+        android:layout_width="3dp"
+        android:layout_height="wrap_content"
+        android:text=": "
+        android:layout_below="@+id/txtdate"
+        android:textSize="18dp"
+        android:layout_toRightOf="@+id/txthh"
+        android:layout_alignBaseline="@+id/txthh"/>
+    <EditText
+        android:id="@+id/txtss"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtdate"
+        android:layout_toRightOf="@+id/txtcolon"
+        />
+
+    <TextView
+        android:id="@+id/txt4"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="Vehical: "
+        android:layout_below="@+id/txt3"
+        android:textSize="18dp"
+        android:layout_alignBaseline="@+id/vehicletype"/>
+
+
+    <EditText
+        android:id="@+id/vehicletype"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txthh"
+        android:layout_toRightOf="@+id/txt4"/>
+
+    <TextView
+        android:id="@+id/txt5"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="Number of Seats: "
+        android:layout_below="@+id/txt4"
+        android:textSize="18dp"
+        android:layout_marginTop="10dp"/>
+
+    <EditText
+        android:id="@+id/numseats"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/vehicletype"
+        android:layout_toRightOf="@+id/txt5"
+       />
+
+    <TextView
+        android:id="@+id/txt6"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="Fare:  "
+        android:layout_below="@+id/txt5"
+        android:textSize="18dp"
+        android:layout_marginTop="10dp"/>
+
+    <TextView
+        android:id="@+id/txtRs"
+        android:layout_width="30dp"
+        android:layout_height="wrap_content"
+        android:text="Rs."
+        android:layout_below="@+id/txt5"
+        android:textSize="18dp"
+        android:layout_toRightOf="@+id/txt6"
+        android:layout_alignBaseline="@+id/fare"/>
+
+
+    <EditText
+        android:id="@+id/fare"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/numseats"
+        android:layout_toRightOf="@+id/txtRs"
+        />
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/btnShow"
-        android:layout_below="@+id/atv_places_dest"
         android:text="Show"
-        android:onClick="ShowOnMap"/>
+        android:onClick="ShowOnMap"
+        android:layout_below="@+id/fare"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="20dp"/>
 </RelativeLayout>

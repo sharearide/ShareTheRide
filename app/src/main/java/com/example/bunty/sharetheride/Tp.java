@@ -6,15 +6,24 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -25,6 +34,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -38,10 +48,15 @@ public class Tp extends Activity {
     PlacesTask placesTask;
     ParserTask parserTask;
 
+    EditText date, timehh, timess, vehicle,numseats, fare;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.autocomplete);
+
+        StrictMode.ThreadPolicy tr = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(tr);
 
         atvPlaces = (AutoCompleteTextView) findViewById(R.id.atv_places);
         atvPlaces.setThreshold(1);
@@ -49,6 +64,14 @@ public class Tp extends Activity {
         //Updated by Shikha Jain 20/9/15
         atvPlaces_dest = (AutoCompleteTextView) findViewById(R.id.atv_places_dest);
         atvPlaces_dest.setThreshold(1);
+
+        date = (EditText)findViewById(R.id.txtdate);
+        timehh = (EditText)findViewById(R.id.txthh);
+        timess = (EditText)findViewById(R.id.txtss);
+        vehicle = (EditText)findViewById(R.id.vehicletype);
+        numseats = (EditText)findViewById(R.id.numseats);
+        fare = (EditText)findViewById(R.id.fare);
+
 
         atvPlaces.addTextChangedListener(new TextWatcher() {
 
@@ -123,7 +146,7 @@ public class Tp extends Activity {
             br.close();
 
         }catch(Exception e){
-            Log.d("Exception while downloading url", e.toString());
+            Log.d("Exception", " Exception while downloading url"+e.toString());
         }finally{
             iStream.close();
             urlConnection.disconnect();
@@ -239,11 +262,13 @@ public class Tp extends Activity {
         String src_addr = src_atc.getText().toString();
         String dest_addr = dest_atc.getText().toString();
 
+        //to get Lat Long of the text selected in Autocomplete
         Geocoder gc = new Geocoder(this, Locale.getDefault());
         String  result = "", result1 = "";
         Address address = null, address_d= null;
        // LatLng src_pts = new LatLng(0,0);
         //LatLng dest_pts= new LatLng(0,0);
+        //finding Source and Destination names's  Lat,Long
         try {
             List addressList = gc.getFromLocationName(src_addr, 1);
             if (addressList != null && addressList.size() > 0) {
@@ -263,15 +288,14 @@ public class Tp extends Activity {
                 result1 = sb_d.toString();
                 //dest_pts = new LatLng(address_d.getLatitude(),address_d.getLongitude());
             }
-
+// sending Latitude and longtude values of source and destination to get deirection
             Intent i = new Intent(this,GetDirection.class);
             i.putExtra("src_lat", String.valueOf(address.getLatitude()));
             i.putExtra("src_long", String.valueOf(address.getLongitude()));
             i.putExtra("dest_lat", String.valueOf(address_d.getLatitude()));
             i.putExtra("dest_long", String.valueOf(address_d.getLongitude()));
-            startActivity(i);
-
-
+            // For getting current lat and long from the map.
+            startActivityForResult(i, 101);
         }
         catch(Exception e){
             Log.e("Error",e.toString());
@@ -279,10 +303,48 @@ public class Tp extends Activity {
         finally {
             Toast.makeText(Tp.this, result+"\n"+result1, Toast.LENGTH_SHORT).show();
         }
-
-
+       // send_OfferRideData();
 
     }
 
     //end update by SHikha Jain 21/9/15
+
+    //update by Shikha Jain 23/9/15
+    public void onActivityResult(int req_id, int res_id, Intent io)
+    {
+        if (req_id == res_id) {
+            Bundle b1 = io.getExtras();
+
+            HttpClient hclient = new DefaultHttpClient();
+            HttpPost post_url = new HttpPost("http://allrounderservices.com/mypool/offer_ride.php");
+
+            List<NameValuePair> data_list = new ArrayList<NameValuePair>();
+            data_list.add(new BasicNameValuePair("userId", "1"));
+            data_list.add(new BasicNameValuePair("source", atvPlaces.getText().toString()));
+            data_list.add(new BasicNameValuePair("destination", atvPlaces_dest.getText().toString()));
+            data_list.add(new BasicNameValuePair("date", date.getText().toString()));
+            data_list.add(new BasicNameValuePair("time", timehh.getText().toString() + ":" + timess.getText().toString() + ":00"));
+            data_list.add(new BasicNameValuePair("latitude", String.valueOf(b1.getDouble("mylat"))));
+            data_list.add(new BasicNameValuePair("longitude", String.valueOf(b1.getDouble("mylong"))));
+            data_list.add(new BasicNameValuePair("vehicleId", "1"));
+            data_list.add(new BasicNameValuePair("seats", numseats.getText().toString()));
+            data_list.add(new BasicNameValuePair("fare", fare.getText().toString()));
+
+            try {
+
+                UrlEncodedFormEntity entity = new UrlEncodedFormEntity(data_list);
+                post_url.setEntity(entity);
+                HttpResponse send_response = hclient.execute(post_url);
+
+                BufferedReader br = new BufferedReader(new InputStreamReader(send_response.getEntity().getContent()));
+                String line = br.readLine();
+                Toast.makeText(this, line, Toast.LENGTH_LONG).show();
+            } catch (Exception e) {
+                System.err.println(e);
+            }
+        }
+        else
+            Log.d("Req_id",res_id+","+req_id);
+    }
+    //end update by Shikha Jain 23/9/15
 }
