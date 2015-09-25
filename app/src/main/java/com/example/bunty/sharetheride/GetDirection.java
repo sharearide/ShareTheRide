@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -19,6 +20,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -42,6 +45,7 @@ public class GetDirection extends FragmentActivity implements LocationListener{
     GoogleMap mGoogleMap;
     ArrayList<LatLng> mMarkerPoints;
     GetCurrLocation gps;
+    double latitude, longitude;
     protected void onCreate(Bundle b) {
         super.onCreate(b);
         setContentView(R.layout.directions);
@@ -66,15 +70,16 @@ public class GetDirection extends FragmentActivity implements LocationListener{
             // check if GPS enabled
             if (gps.canGetLocation()) {
 
-                double latitude = gps.getLatitude();
-                double longitude = gps.getLongitude();
+               latitude = gps.getLatitude();
+               longitude = gps.getLongitude();
 
                 // \n is for new line
                 Toast.makeText(getApplicationContext(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
                 mGoogleMap.addMarker(new MarkerOptions()
                         .position(new LatLng(latitude, longitude))
                         .title("My Location")
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.pegman)));
+                        //BitmapDescriptorFactory.HUE_BLUE)));
 
                 mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 15));
                 // Zoom in, animating the camera.
@@ -336,4 +341,16 @@ public class GetDirection extends FragmentActivity implements LocationListener{
     public void onStatusChanged(String provider, int status, Bundle extras) {
         // TODO Auto-generated method stub
     }
+    public void ShowReq(View v){
+        Circle myCircle;
+        CircleOptions circleOptions = new CircleOptions()
+                .center(new LatLng(latitude,longitude))   //set center
+                .radius(500)   //set radius in meters
+                .fillColor(0x40ff0000)  //semi-transparent
+                .strokeColor(Color.BLUE)
+                .strokeWidth(5);
+
+        myCircle = mGoogleMap.addCircle(circleOptions);
+    }
+
 }

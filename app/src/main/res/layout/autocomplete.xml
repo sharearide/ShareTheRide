@@ -18,7 +18,7 @@
         android:layout_width="280dp"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:hint="@string/str_atv_places"
+        android:hint="Choose Source"
         android:layout_toRightOf="@id/txt1"
         android:singleLine="true"         />
 
@@ -35,7 +35,7 @@
         android:id="@+id/atv_places_dest"
         android:layout_width="280dp"
         android:layout_height="wrap_content"
-        android:hint="@string/str_atv_places"
+        android:hint="Choose Destination"
         android:layout_below="@+id/atv_places"
         android:layout_toRightOf="@+id/txt2"
         android:singleLine="true" />

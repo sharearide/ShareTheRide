@@ -5,7 +5,14 @@
     <fragment
         android:id="@+id/map"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="450dp"
         android:name="com.google.android.gms.maps.SupportMapFragment" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/map"
+        android:text="Show Requesters"
+        android:onClick="ShowReq"/>
 
 </RelativeLayout>
