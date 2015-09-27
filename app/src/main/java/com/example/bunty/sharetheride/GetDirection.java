@@ -2,7 +2,6 @@ package com.example.bunty.sharetheride;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
@@ -66,12 +65,21 @@ public class GetDirection extends FragmentActivity implements LocationListener{
             // Getting Map for the SupportMapFragment
             mGoogleMap = fm.getMap();
 
-            gps = new GetCurrLocation(GetDirection.this);
+            //gps = new GetCurrLocation(GetDirection.this);//Test
             // check if GPS enabled
-            if (gps.canGetLocation()) {
+           // if (gps.canGetLocation()) {test
 
-               latitude = gps.getLatitude();
-               longitude = gps.getLongitude();
+               //latitude = gps.getLatitude();
+               //longitude = gps.getLongitude();
+            b = getIntent().getExtras();
+            Double src_lat = Double.parseDouble(b.getString("src_lat"));
+
+            Double src_long = Double.parseDouble(b.getString("src_long"));
+            Double dest_lat = Double.parseDouble(b.getString("dest_lat"));
+            Double dest_long =Double.parseDouble(b.getString("dest_long"));
+
+            latitude = Double.parseDouble(b.getString("mylat"));
+            longitude = Double.parseDouble(b.getString("mylong"));
 
                 // \n is for new line
                 Toast.makeText(getApplicationContext(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
@@ -86,23 +94,18 @@ public class GetDirection extends FragmentActivity implements LocationListener{
                 mGoogleMap.animateCamera(CameraUpdateFactory.zoomIn());
                 // Zoom out to zoom level 10, animating with a duration of 2 seconds.
                 mGoogleMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
-                Intent i1= new Intent();
-                i1.putExtra("mylat", latitude );
-                i1.putExtra("mylong",longitude);
-                setResult(101, i1);
-            } else {
+                //Intent i1= new Intent();
+                //i1.putExtra("mylat", latitude );
+                //i1.putExtra("mylong",longitude);
+                //setResult(101, i1);
+          /*  } else {
                 // can't get location
                 // GPS or Network is not enabled
                 // Ask user to enable GPS/network in settings
                 gps.showSettingsAlert();
-            }
+            }*/
             mMarkerPoints = new ArrayList<LatLng>();
-            b = getIntent().getExtras();
-            Double src_lat = Double.parseDouble(b.getString("src_lat"));
 
-            Double src_long = Double.parseDouble(b.getString("src_long"));
-            Double dest_lat = Double.parseDouble(b.getString("dest_lat"));
-            Double dest_long =Double.parseDouble(b.getString("dest_long"));
             Log.d("Point",src_lat+" "+src_long+" "+dest_lat+" "+dest_long);
             LatLng src_pts = new LatLng(src_lat,src_long);
             LatLng dest_pts = new LatLng(dest_lat,dest_long);

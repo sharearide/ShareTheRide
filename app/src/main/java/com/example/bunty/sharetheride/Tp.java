@@ -289,13 +289,26 @@ public class Tp extends Activity {
                 //dest_pts = new LatLng(address_d.getLatitude(),address_d.getLongitude());
             }
 // sending Latitude and longtude values of source and destination to get deirection
-            Intent i = new Intent(this,GetDirection.class);
-            i.putExtra("src_lat", String.valueOf(address.getLatitude()));
-            i.putExtra("src_long", String.valueOf(address.getLongitude()));
-            i.putExtra("dest_lat", String.valueOf(address_d.getLatitude()));
-            i.putExtra("dest_long", String.valueOf(address_d.getLongitude()));
-            // For getting current lat and long from the map.
-            startActivityForResult(i, 101);
+           GetCurrLocation gps = new GetCurrLocation(Tp.this);
+            // check if GPS enabled
+            if (gps.canGetLocation()) {
+
+                Double latitude = gps.getLatitude();
+                Double longitude = gps.getLongitude();
+
+                Intent i = new Intent(this, GetDirection.class);
+                i.putExtra("src_lat", String.valueOf(address.getLatitude()));
+                i.putExtra("src_long", String.valueOf(address.getLongitude()));
+                i.putExtra("dest_lat", String.valueOf(address_d.getLatitude()));
+                i.putExtra("dest_long", String.valueOf(address_d.getLongitude()));
+                i.putExtra("mylat", String.valueOf(latitude));
+                i.putExtra("mylong", String.valueOf(longitude));
+                // For getting current lat and long from the map.
+                startActivity(i);
+                send_OfferRideData(latitude, longitude);
+            }
+            else
+                Log.d("ErrorLATLONG","error in Curr Lat Long");
         }
         catch(Exception e){
             Log.e("Error",e.toString());
@@ -303,17 +316,17 @@ public class Tp extends Activity {
         finally {
             Toast.makeText(Tp.this, result+"\n"+result1, Toast.LENGTH_SHORT).show();
         }
-       // send_OfferRideData();
+
 
     }
 
     //end update by SHikha Jain 21/9/15
 
     //update by Shikha Jain 23/9/15
-    public void onActivityResult(int req_id, int res_id, Intent io)
+    public void send_OfferRideData(Double latitude, Double longitude)
     {
-        if (req_id == res_id) {
-            Bundle b1 = io.getExtras();
+       // if (req_id == res_id) {
+         //   Bundle b1 = io.getExtras();
 
             HttpClient hclient = new DefaultHttpClient();
             HttpPost post_url = new HttpPost("http://allrounderservices.com/mypool/offer_ride.php");
@@ -324,8 +337,8 @@ public class Tp extends Activity {
             data_list.add(new BasicNameValuePair("destination", atvPlaces_dest.getText().toString()));
             data_list.add(new BasicNameValuePair("date", date.getText().toString()));
             data_list.add(new BasicNameValuePair("time", timehh.getText().toString() + ":" + timess.getText().toString() + ":00"));
-            data_list.add(new BasicNameValuePair("latitude", String.valueOf(b1.getDouble("mylat"))));
-            data_list.add(new BasicNameValuePair("longitude", String.valueOf(b1.getDouble("mylong"))));
+            data_list.add(new BasicNameValuePair("latitude", String.valueOf(latitude)));
+            data_list.add(new BasicNameValuePair("longitude", String.valueOf(longitude)));
             data_list.add(new BasicNameValuePair("vehicleId", "1"));
             data_list.add(new BasicNameValuePair("seats", numseats.getText().toString()));
             data_list.add(new BasicNameValuePair("fare", fare.getText().toString()));
@@ -342,9 +355,9 @@ public class Tp extends Activity {
             } catch (Exception e) {
                 System.err.println(e);
             }
-        }
-        else
-            Log.d("Req_id",res_id+","+req_id);
+        //}
+        //else
+          //  Log.d("Req_id",res_id+","+req_id);
     }
     //end update by Shikha Jain 23/9/15
 }
