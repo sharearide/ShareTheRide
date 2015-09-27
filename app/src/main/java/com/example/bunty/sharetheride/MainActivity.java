@@ -201,7 +201,7 @@ public class MainActivity extends ActionBarActivity {//implements OnMapReadyCall
         startActivity(i);
     }
 
-    public void TakeRide(View v){
+    public void RequestRide(View v){
 
 
     }

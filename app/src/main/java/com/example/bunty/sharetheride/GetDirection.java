@@ -25,6 +25,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -33,6 +34,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -354,6 +356,46 @@ public class GetDirection extends FragmentActivity implements LocationListener{
                 .strokeWidth(5);
 
         myCircle = mGoogleMap.addCircle(circleOptions);
+
+        try{
+            URL url = new URL("http://www.allrounderservices.com/mypool/nearByPool.php");
+            URLConnection con = url.openConnection();
+            HttpURLConnection hconn = (HttpURLConnection)con;
+            hconn.connect();
+            BufferedReader br = new BufferedReader(new InputStreamReader(hconn.getInputStream()));
+            StringBuffer buffer = new StringBuffer();
+            String line = "";
+            String lineseparator = System.getProperty("line.separator");
+            while((line = br.readLine())!=null){
+                buffer.append(line + lineseparator);
+            }
+            br.close();
+
+            String jsonformat = buffer.toString();
+
+            JSONArray jobj = new JSONObject(jsonformat).getJSONArray("latLong");
+            Log.d("INFORMATION: ",jsonformat.toString());
+
+            for(int i =0;i<jobj.length();i++ ){
+                JSONObject emp_val = (JSONObject)jobj.get(i);
+                String userId = emp_val.getString("userId");
+                Double req_latitude = Double.parseDouble(emp_val.getString("latitude"));
+                Double req_longitude = Double.parseDouble(emp_val.getString("longitude"));
+
+               // System.out.println("UserID: "+userId+" Latitude: "+ req_latitude+" Longitude: "+req_longitude );
+
+                mGoogleMap.addMarker(new MarkerOptions()
+                        .position(new LatLng(req_latitude, req_longitude))
+                        .title("UserID: "+ userId)
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.requesters)));
+            }
+
+
+        }
+        catch(Exception e){
+            System.err.println(e);
+        }
+
     }
 
 }

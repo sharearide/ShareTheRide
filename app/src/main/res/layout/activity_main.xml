@@ -38,11 +38,11 @@
         <Button
             android:layout_width="175dp"
             android:layout_height="wrap_content"
-            android:text="Take Ride"
+            android:text="Request Ride"
             android:layout_below="@+id/tool_bar"
             android:layout_toRightOf="@+id/btnOfferride"
-            android:id="@+id/btnTakeride"
-            android:onClick="TakeRide"/>
+            android:id="@+id/btnReqride"
+            android:onClick="RequestRide"/>
     </RelativeLayout>
 
 
